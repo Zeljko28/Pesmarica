@@ -1,0 +1,481 @@
+﻿<Window x:Class="Pesmarica.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pesmarica"
+        xmlns:viewModel="clr-namespace:Pesmarica.ViewModel"
+        xmlns:view="clr-namespace:Pesmarica.View"
+        mc:Ignorable="d"
+        Title="Pesmarica" Height="600" Width="900"
+        ResizeMode="NoResize"
+        Topmost="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="_this_MouseDown">
+
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
+    <Border BorderBrush="White"
+            BorderThickness="2">
+
+        <Grid>
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush x:Name="bg" ImageSource="Assets/bg.jpg" Opacity="0.9"></ImageBrush>
+                </Grid.Background>
+
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="15"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="15"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button x:Name="CloseBtn"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Height="24"
+                        Width="24"
+                        BorderThickness="0"
+                        Click="CloseBtn_Click">
+
+                        <Button.Background>
+
+                            <ImageBrush ImageSource="Assets/exit-128.png"/>
+
+                        </Button.Background>
+
+                    </Button>
+
+                    <Button x:Name="AddSongBtn"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Height="0"
+                        Width="0"
+                        Background="White"
+                        BorderThickness="0"
+                        Command="{Binding AddSongViewCommand}"
+                        >
+
+                    </Button>
+
+
+
+                    <Grid Grid.Row="2"
+                      Grid.Column="0">
+
+                        <Rectangle Fill="Black" 
+                                       Opacity="0.5" 
+                                       Height="600" 
+                                       Width="765"
+                                       HorizontalAlignment="Right"
+                                   Stroke="White"
+                                   StrokeThickness="2">
+
+
+                        </Rectangle>
+
+
+                        <ContentControl Grid.Row="0" 
+                            Margin="100,10,10,10"
+                            Content="{Binding CurrentView, Mode=TwoWay}" Grid.ColumnSpan="2"
+                                        x:Name="GridControl"/>
+
+                        
+                    </Grid>
+
+                </Grid>
+
+
+
+
+                <Grid x:Name="NavBarMenu"
+                  HorizontalAlignment="Left"
+                  Width="70">
+
+                    <Grid.Background>
+                        <ImageBrush ImageSource="Assets/bg.jpg" Stretch="None">
+
+                        </ImageBrush>
+                    </Grid.Background>
+
+                    <StackPanel x:Name="MenuStackPanel">
+                        <Grid Height="70">
+
+
+                            <TextBlock Grid.Row="1"
+                                   Grid.Column="0"
+                                   Margin="73, 0, 0, 0"
+                                   Text="M E N I"
+                                   Foreground="White"
+                                   FontSize="22"
+                                   Background="Transparent"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center">
+
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="10"
+                                                  ShadowDepth="1"
+                                                  Direction="-90"
+                                                  Color="White"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+
+                            <ToggleButton x:Name="ToggleBtn"
+                                      Grid.Column="0"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Margin="20, 0, 0, 0"
+                                      Height="30"
+                                      Width="30"
+                                      BorderThickness="0"
+                                      Checked="ToggleBtn_Checked"
+                                      Unchecked="ToggleBtn_Unchecked">
+
+                                <ToggleButton.Background>
+                                    <ImageBrush ImageSource="Assets/icons8-menu-96.png"/>
+                                </ToggleButton.Background>
+
+                                <ToggleButton.Triggers>
+
+                                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                                        <BeginStoryboard>
+                                            <Storyboard x:Name="HideStackPanel">
+                                                <DoubleAnimation Storyboard.TargetName="NavBarMenu"
+                                                             Storyboard.TargetProperty="Width"
+                                                             BeginTime="0:0:0"
+                                                             From="230"
+                                                             To="70"
+                                                             Duration="0:0:0.2">
+
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+
+                                    <EventTrigger RoutedEvent="ToggleButton.Checked">
+                                        <BeginStoryboard>
+                                            <Storyboard x:Name="ShowStackPanel">
+                                                <DoubleAnimation Storyboard.TargetName="NavBarMenu"
+                                                             Storyboard.TargetProperty="Width"
+                                                             BeginTime="0:0:0"
+                                                             From="70"
+                                                             To="230"
+                                                             Duration="0:0:0.2">
+
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </ToggleButton.Triggers>
+
+
+                            </ToggleButton>
+                        </Grid>
+
+                        <ListView x:Name="ListViewMenu"
+                              Background="Transparent"
+                              BorderBrush="Transparent"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              FontFamily="Helvetica"
+                              FontSize="17"
+                              >
+
+                            <ListViewItem HorizontalAlignment="Left"
+                                      Margin="0,0,0,15"
+                                      Selected="ListViewItem_Selected"
+                                      Unselected="ListViewItem_Unselected"
+                                      IsSelected="True"
+                                      x:Name="HomeBtn"
+                                      Visibility="Collapsed">
+
+                                <StackPanel x:Name="HomeStackPanel" Orientation="Horizontal"
+                                            Width="230"
+                                            >
+
+                                    <Image Source="Assets/home-128.png"
+                                           Width="30"
+                                           Margin="14,0,0,0" />
+
+                                    <Button
+                                    x:Name="HomeRadio"
+                                    Content="Početna" 
+                                    Height="50"
+                                    FontSize= "15"
+                                    Width="230"
+                                    Padding="15, 0, 0, 0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding HomeViewCommand}"
+                                    Click="HomeRadio_Click"/>
+
+                                </StackPanel>
+
+                                <ListViewItem.ToolTip>
+                                    <ToolTip x:Name="tt_home"
+                                             Content="Početna"/>
+
+                                </ListViewItem.ToolTip>
+
+                            </ListViewItem>
+
+                            <ListViewItem HorizontalAlignment="Left"
+                                      Margin="0,0,0,15"
+                                      Selected="ListViewItem_Selected"
+                                      Unselected="ListViewItem_Unselected"
+                                      x:Name="SearchBtn"
+                                      Visibility="Collapsed">
+
+                                <StackPanel Orientation="Horizontal"
+                                        Width="230"
+                                        x:Name="SearchStackPanel"
+                                        >
+
+                                    <Image Source="Assets/search-128.png"
+                                       Width="30"
+                                       Margin="14,0,0,0"
+                                       />
+
+                                    <Button
+                                    x:Name="SearchRadio"
+                                    Content="Pretraga" 
+                                    Height="50"
+                                    FontSize= "15"
+                                    Width="230"
+                                    Padding="15, 0, 0, 0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding SearchViewCommand}"
+                                    Click="SearchRadio_Click"/>
+
+                                </StackPanel>
+
+                                <ListViewItem.ToolTip>
+                                    <ToolTip x:Name="tt_search"
+                                         Content="Pretraga"/>
+
+                                </ListViewItem.ToolTip>
+
+                            </ListViewItem>
+
+                            <ListViewItem HorizontalAlignment="Left"
+                                      Margin="0,0,0,15"
+                                      Selected="ListViewItem_Selected"
+                                      Unselected="ListViewItem_Unselected"
+                                      x:Name="MusicBtn"
+                                      Visibility="Collapsed">
+
+                                <StackPanel Orientation="Horizontal"
+                                        Width="230">
+
+                                    <Image Source="Assets/music-128.png"
+                                       Width="30"
+                                       Margin="13,0,0,0" />
+
+                                    <Button
+                                    x:Name="MusicRadio"
+                                    Content="Pesme" 
+                                    Height="50"
+                                    FontSize= "15"
+                                    Width="230"
+                                    Padding="15, 0, 0, 0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding SongViewCommand}"
+                                    Click="MusicRadio_Click"/>
+
+
+
+                                </StackPanel>
+
+                                <ListViewItem.ToolTip>
+                                    <ToolTip x:Name="tt_music"
+                                         Content="Pesme"/>
+
+                                </ListViewItem.ToolTip>
+
+                            </ListViewItem>
+
+                            <ListViewItem HorizontalAlignment="Left"
+                                      Margin="0,0,0,15"
+                                      Selected="ListViewItem_Selected"
+                                      Unselected="ListViewItem_Unselected"
+                                      x:Name="UsersBtn"
+                                      Visibility="Collapsed">
+
+                                <StackPanel Orientation="Horizontal"
+                                        Width="230">
+
+                                    <Image Source="Assets/users-128.png"
+                                       Width="30"
+                                       Margin="13,0,0,0" />
+
+                                    <Button
+                                    x:Name="UsersRadio"
+                                    Content="Korisnici" 
+                                    Height="50"
+                                    FontSize= "15"
+                                    Width="230"
+                                    Padding="15, 0, 0, 0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding ShowUsersViewCommand}"
+                                    Click="UsersRadio_Click"/>
+
+
+
+                                </StackPanel>
+
+                                <ListViewItem.ToolTip>
+                                    <ToolTip x:Name="tt_users"
+                                         Content="Korisnici"/>
+
+                                </ListViewItem.ToolTip>
+
+                            </ListViewItem>
+
+                            <ListViewItem HorizontalAlignment="Left"
+                                      Margin="0,0,0,15"
+                                      Selected="ListViewItem_Selected"
+                                      Unselected="ListViewItem_Unselected"
+                                      x:Name="ProfileBtn">
+
+                                <StackPanel Orientation="Horizontal"
+                                        Width="230">
+
+                                    <Image Source="Assets/profile-128.png"
+                                       Width="30"
+                                       Margin="14,0,0,0" />
+
+                                    <Button
+                                    x:Name="ProfileRadio"
+                                    Content="Profil" 
+                                    Height="50"
+                                    FontSize= "15"
+                                    Width="230"
+                                    Margin="15, 0, 0, 0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding ProfileViewCommand}"
+                                    Click="ProfileRadio_Click"/>
+
+
+                                </StackPanel>
+
+                                <ListViewItem.ToolTip>
+                                    <ToolTip x:Name="tt_profile"
+                                         Content="Profil"/>
+
+                                </ListViewItem.ToolTip>
+
+                            </ListViewItem>
+
+                            <ListViewItem HorizontalAlignment="Left"
+                                      Margin="0,0,0,15"
+                                      Selected="ListViewItem_Selected"
+                                      Unselected="ListViewItem_Unselected"
+                                      x:Name="LogoutBtn">
+
+                                <StackPanel Orientation="Horizontal"
+                                        Width="230">
+
+                                    <Image Source="Assets/logout-128.png"
+                                       Width="30"
+                                       Margin="14,0,0,0" />
+
+                                    <Button
+                                    x:Name="LogoutRadio"
+                                    Content="Odjavite se" 
+                                    Height="50"
+                                    FontSize= "15"
+                                    Width="230"
+                                    Margin="15, 0, 0, 0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding AddSongViewCommand}"
+                                    Click="LogoutRadio_Click"/>
+
+
+                                </StackPanel>
+
+                                <ListViewItem.ToolTip>
+                                    <ToolTip x:Name="tt_logout"
+                                         Content="Odjavite se"/>
+
+                                </ListViewItem.ToolTip>
+
+                            </ListViewItem>
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <Border x:Name="Bd"
+                                                    Height="50"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Background="{TemplateBinding Background}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    SnapsToDevicePixels="True">
+
+                                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                                                </Border>
+
+                                                <ControlTemplate.Triggers>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsMouseOver" Value="True"/>
+                                                        </MultiTrigger.Conditions>
+
+                                                        <Setter Property="Background"
+                                                            TargetName="Bd"
+                                                            Value="LightGray"/>
+
+                                                        <Setter Property="Opacity"
+                                                            TargetName="Bd"
+                                                            Value="0.6"/>
+
+                                                        <Setter Property="BorderBrush"
+                                                            TargetName="Bd"
+                                                            Value="LightGray"/>
+                                                    </MultiTrigger>
+                                                </ControlTemplate.Triggers>
+
+                                            </ControlTemplate>
+
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+            
+        </Grid>
+
+    </Border>
+</Window>

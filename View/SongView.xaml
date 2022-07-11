@@ -1,0 +1,282 @@
+﻿<UserControl x:Class="Pesmarica.View.SongView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pesmarica"
+             xmlns:viewModel="clr-namespace:Pesmarica.ViewModel"
+             xmlns:view="clr-namespace:Pesmarica.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:MainViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border BorderBrush="White"
+                BorderThickness="2"
+                Grid.Column="1"
+                Grid.Row="0"
+                Opacity="0.5"
+                Margin="10, 0, 0, 0"/>
+        <StackPanel Grid.Row="0"
+                    Grid.Column="1">
+
+            <Image x:Name="ImageSelected" Source="..//Assets/blank.jpg"
+                   Width="200"
+                   Height="200"
+                   HorizontalAlignment="Center"
+                   Margin="10, 10, 0, 0"
+                       />
+            <TextBlock x:Name="TitleSelected" Text="Naziv: Nije odabrano"
+                           Margin="30, 10, 0, 0"
+                           Foreground="White"
+                           Opacity="0.8"
+                           FontSize="15"
+                           FontFamily="Verdana"
+                           TextWrapping="WrapWithOverflow"/>
+
+            <TextBlock x:Name="ArtistSelected" Text="Izvodjac: Nije odabrano"
+                           Margin="30, 15, 0, 0"
+                           Foreground="White"
+                           Opacity="0.8"
+                           FontSize="15"
+                           FontFamily="Verdana"
+                           TextWrapping="WrapWithOverflow"/>
+
+            <TextBlock x:Name="GenreSelected" Text="Zanr: Nije odabrano"
+                           Margin="30, 15, 0, 0"
+                           Foreground="White"
+                           FontSize="15"
+                           Opacity="0.8"
+                           FontFamily="Verdana"
+                           TextWrapping="WrapWithOverflow"/>
+
+            <Button Content="Otvori pesmu"
+                    Command="{Binding DataContext.ShowSongViewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    x:Name="OpenSongButton"
+                    Margin="20, 30, 20, 0"
+                    Background="Transparent"
+                    Height="35"
+                    Foreground="White" 
+                    Click="OpenSongButton_Click"/>
+
+            <Button Content="Obrisi pesmu"
+                        Margin="20, 10, 20, 0"
+                        Background="Transparent"
+                        Height="35"
+                        Foreground="White"
+                    x:Name="DeleteSongButton"
+                    Click="DeleteSongButton_Click"/>
+
+        </StackPanel>
+
+        <Border Grid.Column="0"
+                Grid.Row="0"
+                BorderBrush="White"
+                BorderThickness="2"
+                Opacity="0.5"
+                Padding="10">
+        </Border>
+
+        <StackPanel Grid.Column="0"
+                    Grid.Row="0">
+
+            <TextBlock Text="Lista svih pesama"
+                       Margin="15, 15, 0, 0"
+                       FontSize="22"
+                       Foreground="White"
+                       FontFamily="Helvetica"
+                       />
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Sortiraj po: "
+                       Margin="15, 30, 0, 0"
+                       FontSize="19"
+                       Foreground="White"
+                       FontFamily="Helvetica"/>
+
+                <ComboBox x:Name="SortComboBox"
+                          Grid.Row="0"
+                          Grid.Column="1"
+                          Height="25"
+                          Width="120"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center"
+                          Margin="5, 10, 0, 0"
+                          SelectionChanged="SortComboBox_SelectionChanged"/>
+            </Grid>
+
+            <StackPanel x:Name="SongListStackPanel"
+                        Background="White"
+                        Opacity="0.9"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Orientation="Vertical">
+
+                <ListView x:Name="ListViewAllSongs"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                          HorizontalContentAlignment="Center"
+                          Height="335"
+                          SelectionChanged="ListViewAllSongs_SelectionChanged">
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Omot" DisplayMemberBinding="{Binding artwork}" Width="50"/>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding song_id}" Width="40"/>
+                            <GridViewColumn Header="Naslov" DisplayMemberBinding="{Binding title}" Width="225"/>
+                            <GridViewColumn Header="Izvodjac" DisplayMemberBinding="{Binding artist_id}" Width="50"/>
+                            <GridViewColumn Header="Godina" DisplayMemberBinding="{Binding year}" Width="120"/>
+                            <!-- Zanr dodaj-->
+                        </GridView>
+                    </ListView.View>
+
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+
+                                        <Grid x:Name="GridListItem">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="50"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition Width="225"/>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="120"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Image Source="{Binding artwork}"
+                                                   Grid.Column="0"
+                                                   Margin="0, 0, 0, 0"/>
+
+                                            <TextBlock Text="{Binding song_id}"
+                                                       FontSize="15"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="5, 0, 0, 0"
+                                                       VerticalAlignment="Center"
+                                                       Grid.Column="1"
+                                                       />
+
+                                            <TextBlock Text="{Binding title}"
+                                                       FontSize="15"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="5, 0, 0, 0"
+                                                       VerticalAlignment="Center"
+                                                       Grid.Column="2"
+                                                       />
+
+                                            <TextBlock Text="{Binding artist_id}"
+                                                       FontSize="15"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="5, 0, 0, 0"
+                                                       VerticalAlignment="Center"
+                                                       Grid.Column="3"
+                                                       />
+
+                                            <TextBlock Text="{Binding year}"
+                                                       FontSize="15"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="5, 0, 0, 0"
+                                                       VerticalAlignment="Center"
+                                                       Grid.Column="4"
+                                                       />
+
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                </MultiTrigger.Conditions>
+
+                                                <Setter Property="Background"
+                                                        TargetName="GridListItem"
+                                                        Value="LightGray"/>
+
+                                                <Setter Property="Opacity"
+                                                        TargetName="GridListItem"
+                                                        Value="0.6"/>
+                                            </MultiTrigger>
+
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsSelected" Value="True"/>
+                                                </MultiTrigger.Conditions>
+
+                                                <Setter Property="Background"
+                                                        TargetName="GridListItem"
+                                                        Value="LightBlue"/>
+
+                                                <Setter Property="Opacity"
+                                                        TargetName="GridListItem"
+                                                        Value="0.6"/>
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <!--
+                    <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="../Assets/hp.png"
+                           Grid.Column="0"
+                           Margin="20, 0, 0, 0"/>
+
+                    <TextBlock Text="Pitala si me"
+                               FontSize="17"
+                               HorizontalAlignment="Left"
+                               Margin="10, 0, 0, 0"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"/>
+                    
+                        <TextBlock Text="Hladno Pivo"
+                                   FontSize="17"
+                                   HorizontalAlignment="Left"
+                                   Margin="10, 0, 0, 0"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="2"/>
+
+                    </Grid>
+                    -->
+                </ListView>
+
+
+            </StackPanel>
+
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>
